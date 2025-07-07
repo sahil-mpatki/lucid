@@ -1,18 +1,25 @@
 mod mutations;
 
-use mutations::*;
 use std::fs;
-use std::io;
 
 use crate::mutations::mutations::bitflip;
 
 fn fuzz() {
-    let mut data = fs::read("/home/sahilpatki/woot/lucid/data/canon_40D.jpg").unwrap();
+    let data = fs::read("/Users/sahilpatki/woot/lucid/data/canon_40D.jpg").unwrap();
+    let mut mutation_data = data.clone();
 
     // mutate the data
-    bitflip(&mut data);
+    bitflip(&mut mutation_data);
 
-    // give it to the target program
+    // give it to the target program (for now just printing the muts)
+    for i in 0..data.len() {
+        if data[i] != mutation_data[i] {
+            println!(
+                "Difference found at: {}: {} {} ",
+                i, data[i], mutation_data[i]
+            );
+        }
+    }
 }
 
 fn main() {
