@@ -33,10 +33,6 @@ fn mutate() {
 fn run() {
     let files = fs::read_dir("/Users/sahilpatki/woot/lucid/out/").unwrap();
     for mut file in files {
-        println!(
-            "{}",
-            file.as_mut().unwrap().file_name().into_string().unwrap()
-        );
         let output = Command::new("/Users/sahilpatki/woot/lucid/test_target/exif")
             .arg(
                 "/Users/sahilpatki/woot/lucid/out/".to_string()
@@ -52,7 +48,6 @@ fn run() {
             .expect("Failed to execute program!");
 
         let status = output.status;
-        println!("{:?}", String::from_utf8_lossy(&output.stdout));
 
         if let Some(signal) = status.signal() {
             if signal == 11 {
@@ -71,11 +66,13 @@ fn run() {
 }
 
 fn fuzz() {
-    // mutate
-    mutate();
+    loop {
+        // mutate
+        mutate();
 
-    // feed it into the target program
-    run();
+        // feed it into the target program
+        run();
+    }
 }
 
 fn main() {
